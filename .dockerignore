@@ -2,3 +2,7 @@
 .git
 .nox
 nominatim-data
+tests
+pytest.ini
+requirements-dev.txt
+.github
