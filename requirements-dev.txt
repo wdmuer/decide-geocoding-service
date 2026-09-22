@@ -1,0 +1,4 @@
+# Test-job dependencies only. The full requirements.txt pulls the ML stack,
+# which no unit-tested module imports.
+pytest==9.1.1
+https://github.com/semantic-ai/decide-ai-service-base/releases/download/v0.3.4/decide_ai_service_base-0.3.4-py3-none-any.whl
