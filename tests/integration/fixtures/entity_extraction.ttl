@@ -1,0 +1,30 @@
+@prefix eli:   <http://data.europa.eu/eli/ontology#> .
+@prefix adms:  <http://www.w3.org/ns/adms#> .
+@prefix task:  <http://redpencil.data.gift/vocabularies/tasks/> .
+@prefix nfo:   <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix mu:    <http://mu.semte.ch/vocabularies/core/> .
+@prefix epvoc: <https://data.europarl.europa.eu/def/epvoc#> .
+
+<http://example.org/test/work/1>
+    a eli:Work ;
+    mu:uuid "test-work-1" .
+
+<http://example.org/test/expression/1>
+    a eli:LegalExpression, eli:Expression ;
+    mu:uuid "test-expression-1" ;
+    eli:realizes <http://example.org/test/work/1> ;
+    eli:title "Besluit over de Kerkstraat" ;
+    eli:description "De gemeenteraad beslist over werken in de Kerkstraat 25 te Gent." ;
+    epvoc:expressionContent "De gemeenteraad beslist over werken in de Kerkstraat 25 te Gent." .
+
+<http://example.org/test/container/1>
+    a nfo:DataContainer ;
+    mu:uuid "test-container-1" ;
+    task:hasResource <http://example.org/test/expression/1> .
+
+<http://example.org/test/task/entity-extraction>
+    a task:Task ;
+    mu:uuid "test-task-entity-extraction" ;
+    adms:status <http://redpencil.data.gift/id/concept/JobStatus/scheduled> ;
+    task:operation <http://lblod.data.gift/id/jobs/concept/TaskOperation/entity-extracting> ;
+    task:inputContainer <http://example.org/test/container/1> .
