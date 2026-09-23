@@ -34,3 +34,4 @@ debugpy==1.8.20
 json-repair==0.59.10
 locationformatter==0.1.3
 dateperiodparser==0.1.3
+pytest==9.1.1
