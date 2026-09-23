@@ -1,0 +1,28 @@
+services:
+  # The tasks query without a GRAPH clause, relying on sparql-parser to inject
+  # graphs in production. There is no sparql-parser here, so this works only
+  # because this image unions the named graphs into the default graph. Changing
+  # the version can break every task with "No source found for task".
+  virtuoso:
+    image: redpencil/virtuoso:1.4.0
+    environment:
+      SPARQL_UPDATE: "true"
+
+  tests:
+    image: ${TEST_IMAGE:?set TEST_IMAGE to the tag built by the workflow}
+    depends_on:
+      - virtuoso
+    working_dir: /app
+    environment:
+      INTEGRATION_TESTS: "1"
+      MU_SPARQL_ENDPOINT: http://virtuoso:8890/sparql
+      MU_SPARQL_UPDATEPOINT: http://virtuoso:8890/sparql
+      MU_SPARQL_TIMEOUT: "120"
+      CONFIG_PATH: /config/config.json
+      COMPOSE_SERVICE: ner-service
+      ALLOW_MU_AUTH_SUDO: "true"
+    volumes:
+      - ./tests:/app/tests:ro
+      - ./pytest.ini:/app/pytest.ini:ro
+      - ./config.json:/config/config.json:ro
+    command: ["uv", "run", "python", "-m", "pytest", "tests/integration"]

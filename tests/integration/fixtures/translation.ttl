@@ -1,0 +1,31 @@
+@prefix eli:   <http://data.europa.eu/eli/ontology#> .
+@prefix adms:  <http://www.w3.org/ns/adms#> .
+@prefix task:  <http://redpencil.data.gift/vocabularies/tasks/> .
+@prefix nfo:   <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix mu:    <http://mu.semte.ch/vocabularies/core/> .
+@prefix epvoc: <https://data.europarl.europa.eu/def/epvoc#> .
+
+<http://example.org/test/work/3>
+    a eli:Work ;
+    mu:uuid "test-work-3" ;
+    eli:is_realized_by <http://example.org/test/expression/3> .
+
+<http://example.org/test/expression/3>
+    a eli:LegalExpression, eli:Expression ;
+    mu:uuid "test-expression-3" ;
+    eli:realizes <http://example.org/test/work/3> ;
+    eli:language <http://publications.europa.eu/resource/authority/language/NLD> ;
+    eli:title "Besluit over de Kerkstraat" ;
+    epvoc:expressionContent "De gemeenteraad beslist over werken in de Kerkstraat te Gent." .
+
+<http://example.org/test/container/3>
+    a nfo:DataContainer ;
+    mu:uuid "test-container-3" ;
+    task:hasResource <http://example.org/test/expression/3> .
+
+<http://example.org/test/task/translation>
+    a task:Task ;
+    mu:uuid "test-task-translation" ;
+    adms:status <http://redpencil.data.gift/id/concept/JobStatus/scheduled> ;
+    task:operation <http://lblod.data.gift/id/jobs/concept/TaskOperation/translating> ;
+    task:inputContainer <http://example.org/test/container/3> .

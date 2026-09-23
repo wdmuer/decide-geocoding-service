@@ -1,0 +1,29 @@
+@prefix eli:   <http://data.europa.eu/eli/ontology#> .
+@prefix adms:  <http://www.w3.org/ns/adms#> .
+@prefix task:  <http://redpencil.data.gift/vocabularies/tasks/> .
+@prefix nfo:   <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix mu:    <http://mu.semte.ch/vocabularies/core/> .
+@prefix epvoc: <https://data.europarl.europa.eu/def/epvoc#> .
+
+<http://example.org/test/work/2>
+    a eli:Work ;
+    mu:uuid "test-work-2" .
+
+<http://example.org/test/expression/2>
+    a eli:LegalExpression, eli:Expression ;
+    mu:uuid "test-expression-2" ;
+    eli:realizes <http://example.org/test/work/2> ;
+    eli:title "Besluit werken Kerkstraat" ;
+    epvoc:expressionContent "Besluit werken Kerkstraat\nDe gemeenteraad,\nOverwegende dat de weg beschadigd is,\nBesluit: de werken worden gegund." .
+
+<http://example.org/test/container/2>
+    a nfo:DataContainer ;
+    mu:uuid "test-container-2" ;
+    task:hasResource <http://example.org/test/expression/2> .
+
+<http://example.org/test/task/segmentation>
+    a task:Task ;
+    mu:uuid "test-task-segmentation" ;
+    adms:status <http://redpencil.data.gift/id/concept/JobStatus/scheduled> ;
+    task:operation <http://lblod.data.gift/id/jobs/concept/TaskOperation/segmenting> ;
+    task:inputContainer <http://example.org/test/container/2> .

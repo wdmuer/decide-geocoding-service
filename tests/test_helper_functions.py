@@ -1,7 +1,6 @@
 """Unit tests for the pure helpers in ``src/helper_functions.py``."""
 import pytest
 
-from conftest import FakeEntity
 from src.helper_functions import (
     clean_house_number,
     clean_string,
@@ -12,6 +11,7 @@ from src.helper_functions import (
     get_start_end_offsets,
     split_addresses,
 )
+from tests.fakes import FakeEntity
 
 
 class TestCleanString:

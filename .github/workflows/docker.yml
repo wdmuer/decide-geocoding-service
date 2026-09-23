@@ -21,6 +21,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - name: Free disk space on the runner
         run: |
@@ -53,16 +54,41 @@ jobs:
             type=sha,format=short
             type=ref,event=pr
 
+      - name: Export test image tag
+        run: echo "TEST_IMAGE=${{ fromJSON(steps.meta.outputs.json).tags[0] }}" >> "$GITHUB_ENV"
+
       - name: Build image
         uses: docker/build-push-action@v7
         with:
           context: .
           platforms: linux/amd64
-          push: ${{ github.event_name != 'pull_request' }}
+          load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
-          cache-to: ${{ github.event_name != 'pull_request' && format('type=registry,ref={0}:buildcache,mode=max', env.IMAGE_NAME) || '' }}
+
+      - name: Run integration tests
+        run: docker compose -f docker-compose.test.yml run --rm tests
+
+      - name: Dump Virtuoso log on failure
+        if: failure()
+        run: docker compose -f docker-compose.test.yml logs virtuoso
+
+      - name: Tear down the test stack
+        if: always()
+        run: docker compose -f docker-compose.test.yml down -v
+
+      - name: Push image
+        if: github.event_name != 'pull_request'
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache,mode=max
 
       - name: Report disk usage
         if: always()
